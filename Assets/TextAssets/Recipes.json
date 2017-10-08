@@ -1,0 +1,28 @@
+﻿[
+  {
+    "name": "Chicken Karage Ramen",
+    "ingredients": [
+      {
+        "name": "shoyu",
+        "weightage": 30
+      },
+      {
+        "name": "karage",
+        "weightage": 70
+      }
+    ]
+  },
+  {
+    "name": "Chicken Karage Ramen",
+    "ingredients": [
+      {
+        "name": "shoyu",
+        "weightage": 30
+      },
+      {
+        "name": "karage",
+        "weightage": 70
+      }
+    ]
+  },
+]
