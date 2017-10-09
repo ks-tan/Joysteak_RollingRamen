@@ -20,8 +20,9 @@ public class UIController : MonoBehaviour {
 	[SerializeField] private GameObject _scoreUIRamneNamePanel;
 	[SerializeField] private GameObject _explosionParticleSystem;
 	[SerializeField] private GameObject _playUICountdown;
-	[SerializeField] private Sprite _happyCustomerImage;
-	[SerializeField] private Sprite _angryCustomerImage;
+	[SerializeField] private GameObject _scoreUICookButton;
+	[SerializeField] private GameObject _scoreUIAgainButton;
+	[SerializeField] private Sprite[] _customerSprites;
 
 	private float _originalPlayUIScoreBarWidth;
 	private float _originalPlayUIScoreBarHeight;
@@ -85,13 +86,40 @@ public class UIController : MonoBehaviour {
 		StartCoroutine (ExecuteScoreSequence (resultScore));
 	}
 
+	public void SlideInScoreUI(bool shouldSlideIn){
+		if (shouldSlideIn) {
+			_scoreUI.transform.DOMove (new Vector3 (0, 0, 0), 1f, true);
+		} else {
+			_scoreUI.transform.DOMove (new Vector3 (0, 15, 0), 1f, true);
+		}
+	}
+
+	public void ShowCookButton(bool shouldShow) {
+		if (shouldShow) {
+			_scoreUICookButton.SetActive (true);
+		} else {
+			_scoreUICookButton.SetActive (false);
+		}
+	}
+
+	public void ShowScoreUICustomerRequest() {
+		_scoreUIAgainButton.SetActive (false);
+		_scoreUIIngredientsPanel.SetActive (false);
+		_scoreUIRamneNamePanel.SetActive (false);
+		_scoreUIStarsPanel.SetActive (false);
+		_scoreUICookButton.SetActive (true);
+		_customerPanel.GetComponent<Image> ().sprite = _customerSprites[0];
+		_customerPanel.GetComponent<Image> ().DOColor (new Color (1, 1, 1), 0.2f);
+	}
+
 	IEnumerator ExecuteScoreSequence(int resultScore){
-		_scoreUI.transform.DOMove (new Vector3 (0, 0, 0), 1f, true);
+		SlideInScoreUI (true);
+		_customerPanel.GetComponent<Image> ().sprite = _customerSprites[1];
 		yield return new WaitForSeconds (1.5f);
 		if (resultScore < 60) {
-			_customerPanel.GetComponent<Image> ().sprite = _angryCustomerImage;
+			_customerPanel.GetComponent<Image> ().sprite = _customerSprites[3];
 		} else {
-			_customerPanel.GetComponent<Image> ().sprite = _happyCustomerImage;
+			_customerPanel.GetComponent<Image> ().sprite = _customerSprites[2];
 		}
 		yield return new WaitForSeconds (1.5f);
 		// Show stars
@@ -100,6 +128,7 @@ public class UIController : MonoBehaviour {
 		_scoreUIScoreBar.sizeDelta = new Vector2 (newScoreBarWidth, _originalScoreUIScoreBarHeight);
 		_scoreUIStarsPanel.SetActive (true);
 		// Show ingredients collected
+		_scoreUIIngredientsPanel.SetActive(true);
 		foreach (KeyValuePair<string, int> ingredient in GameManager.instance.GetCollectedIngredients()) {
 			string ingredientName = ingredient.Key;
 			int ingredientAmount = ingredient.Value;
@@ -116,6 +145,8 @@ public class UIController : MonoBehaviour {
 		}
 		// Show name of the ramen you made
 		_scoreUIRamneNamePanel.SetActive(true);
+		yield return new WaitForSeconds (1f);
+		_scoreUIAgainButton.SetActive (true);
 	}
 
 }

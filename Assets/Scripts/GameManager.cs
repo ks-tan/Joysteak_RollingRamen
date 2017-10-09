@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 	private List<string> _ingredientList = new List<string> ();
 	private string _recipeName;
 	private float _time;
+	private float _startCookingTime;
 	private float _lastCollectibleSpawnTime;
 	private int _resultScore;
 	private bool _scoreCalculated;
@@ -33,7 +34,6 @@ public class GameManager : MonoBehaviour {
 		_recipeName = ChooseRecipeFromJSON ();
 		UIController.instance.UpdateRecipeName (_recipeName);
 		UIController.instance.UpdateScore (0);
-		StartCoroutine (StartGameTimer ());
 	}
 
 	IEnumerator StartGameTimer() {
@@ -41,11 +41,12 @@ public class GameManager : MonoBehaviour {
 		yield return new WaitForSeconds (1f);
 		UIController.instance.ShowCountdown (true);
 		for (int i = 3; i >= 0; i--) {
-			string timerText = i > 0 ? i.ToString () : "GO";
+			string timerText = i > 0 ? i.ToString () : "ROLL!";
 			UIController.instance.UpdateCountdownText (timerText);
 			yield return new WaitForSeconds (1f);
 		}
 		UIController.instance.ShowCountdown (false);
+		_startCookingTime = _time;
 		_hasGameStarted = true;
 	}
 
@@ -68,7 +69,7 @@ public class GameManager : MonoBehaviour {
 
 	void Update() {
 		_time += Time.deltaTime;
-		_hasGameEnded = _hasGameStarted && _time > _maxTime;
+		_hasGameEnded = _hasGameStarted && _time > _startCookingTime + _maxTime;
 		bool shouldShowScorePanel = _hasGameEnded && !_scoreCalculated;
 		bool shouldSpawnCollectible =  _hasGameStarted && _time - _lastCollectibleSpawnTime > _spawnBufferDuration && !_hasGameEnded;
 		if (shouldShowScorePanel) {
@@ -120,6 +121,16 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		return chosenRecipe;
+	}
+
+	public void CookButtonPressed() {
+		UIController.instance.SlideInScoreUI (false);
+		UIController.instance.ShowCookButton (false);
+		StartCoroutine (StartGameTimer ());
+	}
+
+	public void AgainButtonPressed() {
+		UIController.instance.ShowScoreUICustomerRequest();
 	}
 
 	public void AddIngredient(string ingredientName) {
