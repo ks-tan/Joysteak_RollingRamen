@@ -12,4 +12,9 @@ public class CollectibleUI : MonoBehaviour {
 		transform.Find ("Text").GetComponent<Text> ().text = "x" + collectibleCount;
 	}
 
+	public void UpdateCollectibleImage() {
+		int collectibleIndex = GameManager.instance.GetIngredientList ().IndexOf (collectibleName);
+		GetComponent<Image> ().sprite = GameManager.instance.GetIngredientSprites () [collectibleIndex];
+	}
+
 }

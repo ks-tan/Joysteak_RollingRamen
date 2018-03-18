@@ -78,6 +78,7 @@ public class UIController : MonoBehaviour {
 			collectibleUI.collectibleCount = 1;
 			collectibleUI.collectibleName = ingredientName;
 			collectibleUI.UpdateCollectibleCountText ();
+			collectibleUI.UpdateCollectibleImage ();
 		}
 	}
 
@@ -133,12 +134,15 @@ public class UIController : MonoBehaviour {
 			string ingredientName = ingredient.Key;
 			int ingredientAmount = ingredient.Value;
 			for (int i = 0; i < ingredientAmount; i++) {
-				GameObject collectibleUI = GameObject.Instantiate (_collectibleUIPrefab);
-				collectibleUI.transform.SetParent (_scoreUIIngredientsPanel.transform, false);
-				collectibleUI.transform.Find ("Text").gameObject.SetActive (false);
-				collectibleUI.name = ingredientName;
+				GameObject collectible = GameObject.Instantiate (_collectibleUIPrefab);
+				collectible.transform.SetParent (_scoreUIIngredientsPanel.transform, false);
+				collectible.transform.Find ("Text").gameObject.SetActive (false);
+				collectible.name = ingredientName;
+				CollectibleUI collectibleUI = collectible.GetComponent<CollectibleUI> ();
+				collectibleUI.collectibleName = ingredientName;
+				collectibleUI.UpdateCollectibleImage ();
 				GameObject explosionParticleSystem = GameObject.Instantiate (_explosionParticleSystem);
-				explosionParticleSystem.transform.SetParent (collectibleUI.transform, false);
+				explosionParticleSystem.transform.SetParent (collectible.transform, false);
 				explosionParticleSystem.transform.localPosition = new Vector2 (0, 0);
 				yield return new WaitForSeconds (0.2f);
 			}

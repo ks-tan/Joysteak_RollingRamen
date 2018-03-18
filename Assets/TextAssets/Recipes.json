@@ -3,7 +3,7 @@
     "name": "Chicken Karage Ramen",
     "ingredients": [
       {
-        "name": "shoyu",
+        "name": "charsiew",
         "weightage": 30
       },
       {
@@ -13,14 +13,14 @@
     ]
   },
   {
-    "name": "Chicken Karage Ramen",
+    "name": "Wasabi Seaweed Ramen",
     "ingredients": [
       {
-        "name": "shoyu",
+        "name": "seaweed",
         "weightage": 30
       },
       {
-        "name": "karage",
+        "name": "wasabi",
         "weightage": 70
       }
     ]

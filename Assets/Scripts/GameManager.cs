@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	[SerializeField] private GameObject _collectiblePrefab;
 	[SerializeField] private float _maxTime;
 	[SerializeField] private float _spawnBufferDuration;
+	[SerializeField] private List<Sprite> _ingredientSprites;
 
 	private Dictionary<string, int> _collectedIngredients = new Dictionary<string, int>();
 	private List<string> _ingredientList = new List<string> ();
@@ -148,6 +149,10 @@ public class GameManager : MonoBehaviour {
 
 	public Dictionary<string, int> GetCollectedIngredients() {
 		return _collectedIngredients;
+	}
+
+	public List<Sprite> GetIngredientSprites() {
+		return _ingredientSprites;
 	}
 
 	public int GetScore() {

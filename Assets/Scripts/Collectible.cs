@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour {
 
-	[SerializeField] private float speed;
-	private string ingredientName;
+	[SerializeField] private float _speed;
+	private string _ingredientName;
 
 	void Start() {
 		List<string> ingredientList = GameManager.instance.GetIngredientList ();
 		int ingredientListCount = ingredientList.Count;
-		ingredientName = ingredientList [Random.Range (0, ingredientListCount)];
+		int ingredientIndex = Random.Range (0, ingredientListCount);
+		_ingredientName = ingredientList [ingredientIndex];
+		GetComponent<SpriteRenderer> ().sprite = GameManager.instance.GetIngredientSprites () [ingredientIndex];
 	}
 
 	public string GetCollectibleName() {
-		return ingredientName;
+		return _ingredientName;
 	}
 
 	void Update() {
@@ -22,7 +24,7 @@ public class Collectible : MonoBehaviour {
 		if(1.0 < pos.y) {
 			GameObject.Destroy (this.gameObject);
 		} else {
-			transform.Translate(Vector3.up * Time.deltaTime * speed, Space.World);
+			transform.Translate(Vector3.up * Time.deltaTime * _speed, Space.World);
 		}
 	}
 }
