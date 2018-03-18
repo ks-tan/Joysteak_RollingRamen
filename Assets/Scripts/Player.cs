@@ -4,28 +4,53 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-	private float scaleX;
-	private float scaleY;
+	private int _hForcePlayerInput = 20;
+	private int _hForceWallCollide = 700;
+	private float _scaleX;
+	private float _scaleY;
+	private Rigidbody2D _rigidbody;
 
 	void Start() {
-		scaleX = transform.localScale.x;
-		scaleY = transform.localScale.y;
+		_scaleX = transform.localScale.x;
+		_scaleY = transform.localScale.y;
+		_rigidbody = GetComponent<Rigidbody2D> ();
 	}
 
 	void Update() {
-		transform.Translate (Input.acceleration.x, Input.acceleration.y, 0);
-		ClampPositionToScreenSize ();
+		CheckPlayerInput ();
+		CheckWallCollision ();
 	}
 
 	void LateUpdate() {
 		transform.position = new Vector3 (transform.position.x, transform.position.y, 0);
 	}
 
-	void ClampPositionToScreenSize() {
+	void CheckPlayerInput() {
+		if (Application.isMobilePlatform) {
+			transform.Translate (Input.acceleration.x, Input.acceleration.y, 0);
+		} else {
+			if (Input.GetKey ("right")) {
+				_rigidbody.AddForce (new Vector2 (_hForcePlayerInput, 0));
+			} else if (Input.GetKey ("left")) {
+				_rigidbody.AddForce (new Vector2 (-_hForcePlayerInput, 0));
+			}
+		}
+	}
+
+	void CheckWallCollision() {
+		//Clamp player to edge of the screen
 		Vector2 pos = Camera.main.WorldToViewportPoint(transform.position);
 		pos.x = Mathf.Clamp01(pos.x);
 		pos.y = Mathf.Clamp01(pos.y);
 		transform.position = Camera.main.ViewportToWorldPoint(pos);
+		//Check if colliding with wall
+		bool isLeftWall = pos.x == 0;
+		bool isRightWall = pos.x == 1;
+		if (isLeftWall) {
+			_rigidbody.AddForce (new Vector2 (_hForceWallCollide, 0));
+		} else if (isRightWall) {
+			_rigidbody.AddForce (new Vector2 (-_hForceWallCollide, 0));
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D objCollider) {
@@ -34,7 +59,7 @@ public class Player : MonoBehaviour {
 			string collectibleName = collectible.transform.GetComponent<Collectible> ().GetCollectibleName ();
 			GameManager.instance.AddIngredient (collectibleName);
 			GameObject.Destroy (objCollider.gameObject);
-			transform.localScale = new Vector2 (++scaleX, ++scaleY);
+			transform.localScale = new Vector2 (++_scaleX, ++_scaleY);
 		}
 	}
 
