@@ -8,11 +8,20 @@ public class Player : MonoBehaviour {
 	private int _hForceWallCollide = 700;
 	private float _scaleX;
 	private float _scaleY;
+	private float _originalScaleX;
+	private float _originalScaleY;
 	private Rigidbody2D _rigidbody;
 
+	public static Player instance;
+
 	void Start() {
+		if (instance == null) {
+			instance = this;
+		}
 		_scaleX = transform.localScale.x;
 		_scaleY = transform.localScale.y;
+		_originalScaleX = _scaleX;
+		_originalScaleY = _scaleY;
 		_rigidbody = GetComponent<Rigidbody2D> ();
 	}
 
@@ -51,6 +60,12 @@ public class Player : MonoBehaviour {
 		} else if (isRightWall) {
 			_rigidbody.AddForce (new Vector2 (-_hForceWallCollide, 0));
 		}
+	}
+
+	public void ResetPlayerSize() {
+		_scaleX = _originalScaleX;
+		_scaleY = _originalScaleY;
+		transform.localScale = new Vector2 (_originalScaleX, _originalScaleY);
 	}
 
 	void OnTriggerEnter2D(Collider2D objCollider) {

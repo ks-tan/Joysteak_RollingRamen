@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour {
 	[SerializeField] private float _spawnBufferDuration;
 	[SerializeField] private List<Sprite> _ingredientSprites;
 
-	private Dictionary<string, int> _collectedIngredients = new Dictionary<string, int>();
-	private List<string> _ingredientList = new List<string> ();
+	private Dictionary<string, int> _collectedIngredients;
+	private List<string> _ingredientList;
 	private string _recipeName;
 	private float _time;
 	private float _startCookingTime;
@@ -29,12 +29,25 @@ public class GameManager : MonoBehaviour {
 		if (instance == null) {
 			instance = this;
 		}
-		_time = 0f;
-		_lastCollectibleSpawnTime = 0f;
+		ResetGame ();
+	}
+
+	void ResetGame() {
+		_collectedIngredients = new Dictionary<string, int>();
+		_ingredientList = new List<string> ();
 		_ingredientList = LoadIngredientsJSON ();
 		_recipeName = ChooseRecipeFromJSON ();
-		UIController.instance.UpdateRecipeName (_recipeName);
+		_time = 0f;
+		_startCookingTime = 0f;
+		_lastCollectibleSpawnTime = 0f;
+		_resultScore = 0;
+		_scoreCalculated = false;
+		_hasGameEnded = false;
+		_hasGameStarted = false;
 		UIController.instance.UpdateScore (0);
+		UIController.instance.ResetGameUI ();
+		UIController.instance.UpdateRecipeName (_recipeName);
+		Player.instance.ResetPlayerSize ();
 	}
 
 	IEnumerator StartGameTimer() {
@@ -132,6 +145,7 @@ public class GameManager : MonoBehaviour {
 
 	public void AgainButtonPressed() {
 		UIController.instance.ShowScoreUICustomerRequest();
+		ResetGame ();
 	}
 
 	public void AddIngredient(string ingredientName) {

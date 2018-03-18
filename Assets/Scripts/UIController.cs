@@ -82,7 +82,15 @@ public class UIController : MonoBehaviour {
 		}
 	}
 
-
+	public void ResetGameUI () {
+		foreach (Transform collectibleTransform in _playUIIngredientsPanel.transform) {
+			GameObject.Destroy (collectibleTransform.gameObject);
+		}
+		foreach (Transform collectibleTransform in _scoreUIIngredientsPanel.transform) {
+			GameObject.Destroy (collectibleTransform.gameObject);
+		}
+	}
+		
 	public void ShowScorePanel(int resultScore) {
 		StartCoroutine (ExecuteScoreSequence (resultScore));
 	}
