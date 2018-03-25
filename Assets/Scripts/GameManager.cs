@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
 		_hasGameStarted = false;
 		UIController.instance.UpdateScore (0);
 		UIController.instance.ResetGameUI ();
+		GameBackground.instance.ResetGameBackground ();
 		UIController.instance.UpdateRecipeName (_recipeName);
 		Player.instance.ResetPlayerSize ();
 	}
@@ -171,6 +172,22 @@ public class GameManager : MonoBehaviour {
 
 	public int GetScore() {
 		return _resultScore;
+	}
+
+	public bool HasGameStarted() {
+		return _hasGameStarted;
+	}
+
+	public float GetTime() {
+		return _time;
+	}
+
+	public float GetStartCookingTime() {
+		return _startCookingTime;
+	}
+
+	public float GetMaxTime() {
+		return _maxTime;
 	}
 
 }
