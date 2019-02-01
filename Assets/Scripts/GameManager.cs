@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour {
 
 	void Update() {
 		_time += Time.deltaTime;
-		_hasGameEnded = _hasGameStarted && _time > _startCookingTime + _maxTime;
+		_hasGameEnded = _hasGameStarted && _time > _startCookingTime + _maxTime + 2;
 		bool shouldShowScorePanel = _hasGameEnded && !_scoreCalculated;
 		bool shouldSpawnCollectible =  _hasGameStarted && _time - _lastCollectibleSpawnTime > _spawnBufferDuration && !_hasGameEnded;
 		if (shouldShowScorePanel) {

@@ -35,6 +35,7 @@ public class GameBackground : MonoBehaviour {
 			}
 			if (gameTimeElapsed / gameDuration >= 0.9f) {
 				_bgSoup.transform.Translate(Vector3.up * Time.deltaTime * 5, Space.World);
+				_bgSoup.transform.Translate(Vector3.left * Time.deltaTime * 5, Space.World);
 			}
 		}
 	}
